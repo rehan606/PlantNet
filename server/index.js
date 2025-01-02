@@ -49,6 +49,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const userCollection = client.db('plantNet-DB').collection('users')
+    const plantCollection = client.db('plantNet-DB').collection('plants')
 
     // Save and Update user DB 
     app.post('/users/:email', async(req, res) => {
@@ -64,13 +65,6 @@ async function run() {
       const result = await userCollection.insertOne({...user, role: 'customer', timestamp: Date.now()})
       res.send(result)
     })
-
-
-
-
-
-
-
 
     // Generate jwt token
     app.post('/jwt', async (req, res) => {
@@ -99,6 +93,14 @@ async function run() {
       } catch (err) {
         res.status(500).send(err)
       }
+    })
+
+
+    // Post plant data in databae 
+    app.post('/plants',  async(req, res) => {
+      const plant = req.body 
+      const result = await plantCollection.insertOne(plant)
+      res.send(result)
     })
 
     // Send a ping to confirm a successful connection
