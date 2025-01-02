@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import useAuth from '../../hooks/useAuth'
+import { TbFidgetSpinner } from 'react-icons/tb' 
 import { toast } from 'react-hot-toast'
-import { TbFidgetSpinner } from 'react-icons/tb'
-import axios from 'axios'
+import { imageUpload } from '../../api/utils'
 
 const SignUp = () => {
   const { createUser, updateUserProfile, signInWithGoogle, loading } = useAuth()
@@ -16,14 +16,11 @@ const SignUp = () => {
     const email = form.email.value
     const password = form.password.value
     const image = form.image.files[0]
-    const formData = new FormData()
-    formData.append('image', image)
 
-    // send image data to imgbb
-    const {data} = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`, formData)
+    
 
-    const image_url = data.data.display_url
-    // console.log(image)
+
+    const photoURL = await imageUpload(image)
     
 
     try {
@@ -33,7 +30,7 @@ const SignUp = () => {
       //3. Save username & profile photo
       await updateUserProfile(
         name,
-        image_url
+        photoURL
       )
       console.log(result)
 
