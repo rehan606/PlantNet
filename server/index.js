@@ -103,6 +103,13 @@ async function run() {
       res.send(result)
     })
 
+    //Get Posted plant data From databae 
+    app.get('/plants',  async(req, res) => {
+      
+      const result = await plantCollection.find().limit(8).toArray()
+      res.send(result)
+    })
+
     // Send a ping to confirm a successful connection
     await client.db('admin').command({ ping: 1 })
     console.log(
