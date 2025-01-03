@@ -103,10 +103,17 @@ async function run() {
       res.send(result)
     })
 
-    //Get Posted plant data From databae 
+    //Get All Posted plant data From databae 
     app.get('/plants',  async(req, res) => {
-      
       const result = await plantCollection.find().limit(8).toArray()
+      res.send(result)
+    })
+
+    // Get plant data by ID
+    app.get('/plants/:id', async(req, res) => {
+      const id = req.params.id
+      const query = {_id: new ObjectId (id)}
+      const result = await plantCollection.findOne(query)
       res.send(result)
     })
 

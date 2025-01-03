@@ -14,6 +14,8 @@ const Plants = () => {
     }
   })
 
+  
+
   if(isLoading) return <LoadingSpinner/>
 
   return (
