@@ -50,6 +50,7 @@ async function run() {
   try {
     const userCollection = client.db('plantNet-DB').collection('users')
     const plantCollection = client.db('plantNet-DB').collection('plants')
+    const orderCollection = client.db('plantNet-DB').collection('orders')
 
     // Save and Update user DB 
     app.post('/users/:email', async(req, res) => {
@@ -114,6 +115,25 @@ async function run() {
       const id = req.params.id
       const query = {_id: new ObjectId (id)}
       const result = await plantCollection.findOne(query)
+      res.send(result)
+    })
+
+    // Save Order in database
+    app.post('/order', async(req, res) => {
+      const orderInfo = req.body 
+      const result = await orderCollection.insertOne(orderInfo)
+      res.send(result)
+    })
+
+    // increment decrement quantity , when order or return item
+    app.patch('/plants/quantity/:id', async(req, res) =>{
+      const id = req.params.id
+      const {quantityToUpdate} = req.body
+      const filter = {_id: new ObjectId(id)}
+      let updateDoc = {
+        $inc: { quantity: -quantityToUpdate}
+      }
+      const result = await plantCollection.updateOne(filter, updateDoc)
       res.send(result)
     })
 
